@@ -11,8 +11,8 @@ In the future, we'd like to integrate more volunteer organizations in our web sc
 ## Setup
 
 1. Install python3 and the Chrome driver for web scraping (https://chromedriver.storage.googleapis.com/index.html?path=111.0.5563.41/) on your machine
-1. ```git clone https://github.com/tylerdtran/HOTHX.git```
-2. ```cd HOTHX```
+1. ```git clone https://github.com/ajtadeo/clean-marine.git```
+2. ```cd clean-marine```
 3. ```pip3 install pipenv```
 4. ```pipenv shell```
 5. ```pip3 install django selenium django_components webdriver_manager```
