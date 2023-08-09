@@ -3,8 +3,12 @@ from django.views import generic
 from django.db import models
 from webscraper.models import Events
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 def save_function(event_list):
-    print('starting save')
     new_count = 0
 
     for event in event_list:
@@ -22,7 +26,7 @@ def save_function(event_list):
             print('failed at latest_event is none')
             print(e)
             break
-    return print('finished')
+    # return print('finished')
 
 # # replace the following line with the webscraper function
 # save_function([{
@@ -34,7 +38,9 @@ def save_function(event_list):
 # 'placeid': 'ChIJN1t_tDeuEmsRUsoyG83frY4'
 # }])
 
+
 def home_page_view(request):
     context = {}
     context['events'] = Events.objects.all()
+    context['key'] = os.getenv("GOOGLE_MAPS_KEY")
     return render(request, 'home.html', context)

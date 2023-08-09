@@ -1,27 +1,13 @@
 {% load component_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <title>HothX</title>
+    <title>Clean Marine</title>
     {% component_css_dependencies %}
-    <style>
-        #header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4vh;
-        }
-
-        #menu {
-            font-size: 30px;
-            cursor: pointer;
-        }
-        #page-wrapper {
-            margin: 6vh 7vw;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'clean-marine/styles.css' %}">
 </head>
 
 <body>
@@ -36,31 +22,6 @@
       {% endblock content %}
     </div>
   </body>
-  
-  <style>
-    #header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      /* height: 80px; */
-    }
-  
-    .logo {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  
-    .logo img {
-      height: 30px;
-      margin-right: 10px;
-    }
-  
-    h1 {
-      display: inline-block;
-      vertical-align: middle;
-      margin: 0;
-    }
-  </style>
 </html>
 
 <!-- all content is placed in between "block" and "endblock" -->

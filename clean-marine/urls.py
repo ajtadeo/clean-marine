@@ -1,4 +1,4 @@
-"""hothx URL Configuration
+"""clean-marine URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from .views import home_page_view
+
 # scraping tools
 from bs4 import BeautifulSoup
 import json
@@ -34,10 +35,10 @@ urlpatterns = [
     # path('command/<int:id>/cmd', command)
 ]
 
-## Scrape Tool ##
-
+# ===== Scrape Tool ===== #
 SURFRIDER_URL = 'https://volunteer.surfrider.org'
 DRIVER_PATH = "/Users/ajtadeo/chromedriver_mac64/chromedriver"
+
 
 # This function scrapes the Surfrider Foundation website for events
 def scrape_surfrider():
@@ -65,6 +66,7 @@ def scrape_surfrider():
     print(e_list)
     save_function(e_list)
 
+
 def scrape_event(event):
     link = event.find_element(By.TAG_NAME, "a").get_attribute("href")
     eventname = event.find_element(By.TAG_NAME, "h2").text
@@ -84,26 +86,26 @@ def scrape_event(event):
     }
     return result
 
+
 # This function takes a list of JSON events and loads them into the database
 def save_function(event_list):
-    print('starting save')
     new_count = 0
 
     for event in event_list:
         try:
             Events.objects.create(
-                placeid = urllib.parse.quote_plus(event['location']),
-                eventname = event['eventname'],
-                organization = event['organization'],
-                link = event['link'],
-                date_and_time = event['date_and_time'],
-                location = event['location'],
+                placeid=urllib.parse.quote_plus(event['location']),
+                eventname=event['eventname'],
+                organization=event['organization'],
+                link=event['link'],
+                date_and_time=event['date_and_time'],
+                location=event['location'],
             )
             new_count += 1
         except Exception as e:
             print('failed at latest_event is none')
             print(e)
             break
-    return print('finished')
+    # return print('finished')
 
-scrape_surfrider()
+# scrape_surfrider()

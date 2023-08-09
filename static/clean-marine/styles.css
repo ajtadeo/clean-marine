@@ -1,0 +1,56 @@
+#content-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: stretch;
+    height: 80vh;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+#event-list {
+    order: 1;
+    height: 100%;
+    flex-basis: 48%;
+}
+
+#google-map {
+    order: 2;
+    flex-basis: 50%;
+    padding: 10px;
+}
+
+#header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 4vh;
+}
+
+.logo {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+h1 {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+}
+
+#menu {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+#page-wrapper {
+    margin: 6vh 7vw;
+}

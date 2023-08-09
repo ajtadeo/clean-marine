@@ -8,7 +8,6 @@ class Event(component.Component):
 
     # This component takes one parameter, a date string to show in the template
     def get_context_data(id, eventname, organization, link, date_and_time, location, placeid):
-        print("HERE")
         return {
             "id": "bs",
             "eventname": eventname,
