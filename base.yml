@@ -1,0 +1,13 @@
+name: cm_base
+channels: 
+  - defaults
+dependencies:
+  - python>=3.0
+  - pip
+  - pip:
+    - django
+    - django_components
+    - webdriver_manager
+    - beautifulsoup4
+    - selenium
+    - python-dotenv
