@@ -5,9 +5,9 @@
 <div id="content-wrapper">
     <div id="event-list">
         <h3>Beach Cleanups</h3>
-        {% for event_i in events %}
-            {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link date_and_time=event_i.date_and_time location=event_i.location placeid=event_i.placeid %}
-        {% endfor %}
+        {% comment %} {% for event_i in events %}
+            {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link datetime=event_i.datetime location=event_i.location placeid=event_i.placeid %}
+        {% endfor %} {% endcomment %}
     </div>
     <div id="google-map"></div>
     <script 
@@ -19,23 +19,22 @@
 <script>
     function initMap(data){
         const map = new google.maps.Map(document.getElementById("google-map"));
-
-        // this will be supplied from the database
-        const markerData = [
-            { position: { lat: 51.5944418, lng: 4.7492914 } },
-            { position: { lat: 51.524837, lng: -0.083244 } },
-        ]
+        const events = {{ events|safe }}
+        console.log(events)
         
         // create markers and update the map to fit
         const bounds = new google.maps.LatLngBounds()
         var markers = []
-        for (var data of markerData) {
-            var marker = new google.maps.Marker({
-                position: data.position,
-                map: map
-            })
-            markers.push(marker)
-            bounds.extend(marker.getPosition())
+        for (var event of events) {
+            console.log(event.fields.lat +" "+ event.fields.lng)
+            if (event.fields.lat != null){
+                var marker = new google.maps.Marker({
+                    position: { lat: event.fields.lat, lng: event.fields.lng} ,
+                    map: map,
+                })
+                markers.push(marker)
+                bounds.extend(marker.getPosition())
+            }
         }
 
         map.fitBounds(bounds)

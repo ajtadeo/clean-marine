@@ -78,3 +78,60 @@ Invoke commands are this app's custom CLI, used for simplifying tasks that are d
 * Runs all web scrapers and updates the database with new information.
 * Currently implemented web scrapers:
     * Surfrider Foundation
+
+#### `invoke dump`
+
+* Dumps data from the SQLite database into the given filename
+
+## Database Manipulation
+
+#### View Table Structure
+1. In the terminal:
+    ```
+    python3 manage.py dbshell
+    ```
+2. In the dbshell:
+    ```sql
+    .header on
+    .mode column
+    pragma table_info('webscraper_events');
+    ```
+
+#### Update Table Structure
+1. Make changes to `webscraper/models.py`
+2. In the terminal in the root directory:
+    ```
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+#### Delete the Table
+Sometimes it's best to just start from scratch and rerun the webscraper ;-;
+
+1. In the terminal:
+    ```
+    python manage.py dbshell
+    ```
+2. In the dbshell:
+    ```sql
+    DROP TABLE webscraper_events;
+    ```
+
+#### Create the Table
+1. In the terminal:
+    ```
+    python manage.py dbshell
+    ```
+2. In the dbshell:
+    ```sql
+    CREATE TABLE webscraper_events (
+        id INTEGER PRIMARY KEY NOT NULL,
+        eventname TEXT NOT NULL UNIQUE,
+        organization TEXT NOT NULL,
+        link TEXT NOT NULL,
+        datetime TEXT,
+        location TEXT,
+        lng FLOAT,
+        lat FLOAT
+    );
+    ```

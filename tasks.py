@@ -2,6 +2,9 @@
 from invoke import task, run
 import os
 import django
+import sqlite3
+from dotenv import load_dotenv
+import requests
 # from xml.etree import ElementTree
 # from os import listdir
 # from os.path import isfile, join
@@ -9,6 +12,7 @@ import django
 # this setup needs to be at the top in order to execute the webscraper the app's context
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clean-marine.settings")
 django.setup()
+load_dotenv()
 
 # web scraping
 # from bs4 import BeautifulSoup
@@ -44,10 +48,10 @@ SURFRIDER_URL = 'https://volunteer.surfrider.org'
 @task
 def scrape(context, env='cm_base'):
     """ Run webscrapers for all websites """
-    scrape_surfrider(context, env)
+    scrape_surfrider()
 
 
-def scrape_surfrider(context, env):
+def scrape_surfrider():
     """ Run webscraper for Surfrider website """
     try:
         print('Starting Surfrider web scraper...')
@@ -90,21 +94,26 @@ def scrape_surfrider_event(event):
         datetime_location = event.find_elements(By.TAG_NAME, "li")
         datetime = datetime_location[0].text
         if (len(datetime_location) == 2):
-            location = datetime_location[1].text
+            location_raw = datetime_location[1].text
+            location = location_raw.replace("Location: ", "")
         else:
             location = ""
+        
+        # if location is blank, then the coordinates request will fail and the object will be {'latitude': None, 'longitude': None}
+        lat, lng = get_coordinates(urllib.parse.quote_plus(location))
 
         result = {
-            "placeid": urllib.parse.quote_plus(location),
             "eventname": eventname,
             "organization": organization,
             "link": link,
-            "date_and_time": datetime,
+            "datetime": datetime,
             "location": location,
+            "lat": lat,
+            "lng": lng
         }
 
         # save to DB
-        # save(result)
+        save(result)
         return 1
     
     except Exception as err:
@@ -113,17 +122,70 @@ def scrape_surfrider_event(event):
         return 0
 
 
+def get_coordinates(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    params = {
+        "address": address,
+        "key": os.getenv("GOOGLE_MAPS_KEY")
+    }
+    res = requests.get(url, params=params)
+    data = res.json()
+
+    if data["status"] == "OK":
+        location = data["results"][0]["geometry"]["location"]
+        latitude = location["lat"]
+        longitude = location["lng"]
+        return float(latitude), float(longitude)
+    else:
+        print(F"Geocoding failed for {address}:", data["status"])
+        return None, None
+
+
 def save(event):
     """ Load a JSON format event into the DB """
     try:
         Events.objects.create(
-            placeid=event['placeid'],
             eventname=event['eventname'],
             organization=event['organization'],
             link=event['link'],
-            date_and_time=event['date_and_time'],
+            datetime=event['datetime'],
             location=event['location'],
+            lat=event['lat'],
+            lng=event['lng'],
         )
     except Exception as e:
         print('[ERROR] Saving to DB failed. See exception:')
         print(e)
+
+
+@task
+def dump(context, env='cm_base'):
+    """ Dumps Events table into dump.json """
+    cmd = './manage.py dumpdata webscraper.Events --natural-primary > dump.json'
+    run(cmd)
+
+
+@task
+def deleteEvents(context, env='cm_base'):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+
+    # SQL command to drop a table
+    table_name = 'events'
+    drop_table_query = f"DROP TABLE IF EXISTS {table_name};"
+
+    # Execute the query
+    cursor.execute(drop_table_query)
+
+    # check if the table exists
+    exists_query = f"SELECT name FROM sqlite_master WHERE type='table' AND name={table_name};"
+    cursor.execute(exists_query)
+    
+    result = cursor.fetchone()  # Fetch the first result (table name)
+
+    print("Events table was deleted: " + str(result is not None))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
