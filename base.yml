@@ -12,3 +12,4 @@ dependencies:
     - selenium
     - python-dotenv
     - flake8
+    - invoke
