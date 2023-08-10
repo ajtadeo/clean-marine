@@ -40,6 +40,7 @@ In the future, we'd like to integrate more volunteer organizations in our web sc
     ```
 
 ## Updating dependencies
+
 1. Update dependencies under `pip` in `base.yml`.
 2. Deactivate the virtual environment if it is currently running.
     ```
@@ -67,3 +68,13 @@ In the future, we'd like to integrate more volunteer organizations in our web sc
     ```
     pip list --local
     ```
+
+## Invoke Commands
+
+Invoke commands are this app's custom CLI, used for simplifying tasks that are done regularly. Run these commands from the root directory `clean-marine`.
+
+#### `invoke scrape`
+
+* Runs all web scrapers and updates the database with new information.
+* Currently implemented web scrapers:
+    * Surfrider Foundation
