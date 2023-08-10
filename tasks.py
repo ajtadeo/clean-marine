@@ -163,29 +163,3 @@ def dump(context, env='cm_base'):
     """ Dumps Events table into dump.json """
     cmd = './manage.py dumpdata webscraper.Events --natural-primary > dump.json'
     run(cmd)
-
-
-@task
-def deleteEvents(context, env='cm_base'):
-    # Connect to the SQLite database
-    conn = sqlite3.connect('db.sqlite3')
-    cursor = conn.cursor()
-
-    # SQL command to drop a table
-    table_name = 'events'
-    drop_table_query = f"DROP TABLE IF EXISTS {table_name};"
-
-    # Execute the query
-    cursor.execute(drop_table_query)
-
-    # check if the table exists
-    exists_query = f"SELECT name FROM sqlite_master WHERE type='table' AND name={table_name};"
-    cursor.execute(exists_query)
-    
-    result = cursor.fetchone()  # Fetch the first result (table name)
-
-    print("Events table was deleted: " + str(result is not None))
-
-    # Commit the changes and close the connection
-    conn.commit()
-    conn.close()

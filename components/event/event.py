@@ -6,16 +6,22 @@ class Event(component.Component):
     # you can override def get_template_name() instead of specifying the below variable.
     template_name = "event/event.html"
 
-    def get_context_data(self, **kwargs):
+    # def get_context_data(self, **kwargs):
+    #     return {
+    #         "eventname": kwargs['eventname'],
+    #         "organization": kwargs['organization'],
+    #         "link": kwargs['link'],
+    #         "datetime": kwargs['datetime'],
+    #         "location": kwargs['location'],
+    #     }
+    def get_context_data(self, eventname, organization, link, datetime, location):
         return {
-            "eventname": kwargs['eventname'],
-            "organization": kwargs['organization'],
-            "link": kwargs['link'],
-            "datetime": kwargs['datetime'],
-            "location": kwargs['location'],
-            "lat": kwargs['lat'],
-            "lng": kwargs['lng'],
+            "eventname": eventname,
+            "organization": organization,
+            "link": link,
+            "datetime": datetime,
+            "location": location,
         }
-
+    
     class Media:
         css = "components/event.css"

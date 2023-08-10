@@ -5,9 +5,9 @@
 <div id="content-wrapper">
     <div id="event-list">
         <h3>Beach Cleanups</h3>
-        {% comment %} {% for event_i in events %}
-            {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link datetime=event_i.datetime location=event_i.location placeid=event_i.placeid %}
-        {% endfor %} {% endcomment %}
+        {% for event_i in events %}
+            {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link datetime=event_i.datetime location=event_i.location %}
+        {% endfor %}
     </div>
     <div id="google-map"></div>
     <script 
@@ -20,13 +20,11 @@
     function initMap(data){
         const map = new google.maps.Map(document.getElementById("google-map"));
         const events = {{ events|safe }}
-        console.log(events)
         
         // create markers and update the map to fit
         const bounds = new google.maps.LatLngBounds()
         var markers = []
         for (var event of events) {
-            console.log(event.fields.lat +" "+ event.fields.lng)
             if (event.fields.lat != null){
                 var marker = new google.maps.Marker({
                     position: { lat: event.fields.lat, lng: event.fields.lng} ,
