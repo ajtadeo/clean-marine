@@ -10,18 +10,128 @@ In the future, we'd like to integrate more volunteer organizations in our web sc
 
 ## Setup
 
-1. Install python3 and the Chrome driver for web scraping (https://chromedriver.storage.googleapis.com/index.html?path=111.0.5563.41/) on your machine
-1. ```git clone https://github.com/ajtadeo/clean-marine.git```
-2. ```cd clean-marine```
-3. ```pip3 install pipenv```
-4. ```pipenv shell```
-5. ```pip3 install django selenium django_components webdriver_manager```
+1. Install python3 and the [Chrome driver](https://chromedriver.storage.googleapis.com/index.html?path=111.0.5563.41/) for web scraping on your machine
+1. Clone the repository and cd into it.
+    ```
+    git clone https://github.com/ajtadeo/clean-marine.git
+    cd clean-marine
+    ```
+3. Set up the virtual environment.
+    * Create the virutal environment.
+        ```
+        conda env create -f base.yml
+        ```
+    * Verify that the virtual environment was created correctly.
+        ```
+        conda info --envs
+        ```
+    * Activate the virtual environment.
+        ```
+        conda activate cm_base
+        ```
+4. Migrate and update the SQLite database. Currently, running `./manage.py makemigrations` makes migrations and scrapes the web since there is no automated scraping capability. 
+    ```
+    ./manage.py makemigrations
+    ./manage.py migrate
+    ```
+5. Start the development server.
+    ```
+    ./manage.py runserver
+    ```
 
-## Updating the SQL Database
-1. ```python manage.py makemigrations```
-2. ```python manage.py migrate```
+## Updating dependencies
 
-## Running the Development Server
-1. ```python manage.py runserver``` 
-2. Open the web page at http://localhost:8000/
+1. Update dependencies under `pip` in `base.yml`.
+2. Deactivate the virtual environment if it is currently running.
+    ```
+    conda deactivate
+    ```
+3. Update the virtual environment. 
+    * If you are removing a dependency, removing and recreating the virtual environment is necessary since `--prune` does not work as of August 9 2023. 
+        ```
+        conda remove --name cm_base --all
+        conda env create -f base.yml
+        ```
+    * Otherwise, update the virtual environment as normal.
+        ```
+        conda env update -f base.yml
+        ```
+4. Verify that the virtual environment was updated correctly.
+    ```
+    conda info --envs
+    ```
+5. Activate the virtual environment.
+    ```
+    conda activate cm_base
+    ```
+6. Verify that the new dependency was added to the virtual environment.
+    ```
+    pip list --local
+    ```
 
+## Invoke Commands
+
+Invoke commands are this app's custom CLI, used for simplifying tasks that are done regularly. Run these commands from the root directory `clean-marine`.
+
+#### `invoke scrape`
+
+* Runs all web scrapers and updates the database with new information.
+* Currently implemented web scrapers:
+    * Surfrider Foundation
+
+#### `invoke dump`
+
+* Dumps data from the SQLite database into the given filename
+
+## Database Manipulation
+
+#### View Table Structure
+1. In the terminal:
+    ```
+    python3 manage.py dbshell
+    ```
+2. In the dbshell:
+    ```sql
+    .header on
+    .mode column
+    pragma table_info('webscraper_events');
+    ```
+
+#### Update Table Structure
+1. Make changes to `webscraper/models.py`
+2. In the terminal in the root directory:
+    ```
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+#### Delete the Table
+Sometimes it's best to just start from scratch and rerun the webscraper ;-;
+
+1. In the terminal:
+    ```
+    python manage.py dbshell
+    ```
+2. In the dbshell:
+    ```sql
+    DROP TABLE webscraper_events;
+    ```
+
+#### Create the Table
+1. In the terminal:
+    ```
+    python manage.py dbshell
+    ```
+2. In the dbshell:
+    ```sql
+    CREATE TABLE webscraper_events (
+        id INTEGER PRIMARY KEY NOT NULL,
+        eventname TEXT NOT NULL UNIQUE,
+        organization TEXT NOT NULL,
+        link TEXT NOT NULL,
+        datetime TEXT,
+        location TEXT,
+        lng FLOAT,
+        lat FLOAT
+    );
+    ```

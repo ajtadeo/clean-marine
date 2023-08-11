@@ -1,37 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-    <title>Django Cards</title>
-    <style>
-        .volunteer-link {
-            color: #000000;
-        }
-        .volunteer-link:hover {
-            color: #808080;
-        }
-        .card-title {
-            text-decoration: none;
-        }
-    </style>
-</head>
-
-<body>
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
-        <div class="card" style="width: 100%; margin: 10px; margin-right: 35px; border-radius: 20px; border-color: transparent; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <div style="display: flex; flex-direction: row">
-                    <a class="volunteer-link" href="{{ link }}"><h4 class="card-title" style="cursor: pointer;">{{ eventname }}, {{ organization }} </h4></a>
-                </div>
-                <p class="card-text">{{ date_and_time }} | {{ location }}</p>
-                <!-- <a href={{ url }} class="btn btn-outline-secondary">Sign Up</a> -->
-                <!-- <a href="/command/{{ card.id }}/delete" class="btn btn-primary">Delete</a> -->
-            </div>
+{% load static %}
+<div class="event-card">
+    <div class="event-card-body">
+        <h4 class="event-card-title">{{ eventname }}, {{ organization }} </h4>
+        <div class="event-card-text">
+            <p>{{ datetime }}</p>
+            <p>{{ location}}</p>
         </div>
+        <a href={{ link }} class="btn btn-outline-secondary">Learn More</a>
     </div>
-</body>
-
-</html>
+</div>

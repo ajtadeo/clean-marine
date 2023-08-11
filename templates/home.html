@@ -1,57 +1,43 @@
 {% extends '_base.html' %}
-
+{% load static %}
 {% block content %}
 
-<style>
-    html, body {
-    /* overflow: hidden; */
-  }
-
-    #content-wrapper {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: stretch;
-        align-content: stretch;
-        height: 80vh;
-        background-color: #f0f0f0;
-        padding: 20px;
-        border-radius: 20px;
-        /* position: relative; */
-    }
-
-    #event-list {
-        order: 1;
-        height: 100%;
-        flex-basis: 48%;
-        /* mask-image: linear-gradient(to bottom, transparent 10px, #f0f0f0 10px); */
-        /* -webkit-mask-image: linear-gradient(to bottom, transparent 10px, #f0f0f0 10px); */
-        /* overflow: scroll; */
-    }
-
-    #google-map {
-        order: 2;
-        /* width: 100%;
-        height: 100%; */
-        flex-basis: 50%;
-        padding: 10px;
-        /* overflow: hidden; */
-    }
-</style>
 <div id="content-wrapper">
-    <div id="event-list">
+    <div id="events">
         <h3>Beach Cleanups</h3>
-        {% for event_i in events %}
-            {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link date_and_time=event_i.date_and_time location=event_i.location placeid=event_i.placeid %}
-        {% endfor %}
+        <div id="events-list">
+            {% for event_i in events %}
+                {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link datetime=event_i.datetime location=event_i.location %}
+            {% endfor %}
+        </div>
     </div>
-    <div id="google-map">
-        {% for event_i in events %}
-            <iframe width="100%" height="100%" style="border:5px" loading="lazy" allowfullscreen
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAFYSVqdgFsiww6aTS_DLN40bzofjB6fMA&q={{ event_i.placeid }}"></iframe>
-        {% endfor %}
-    </div>
-
+    <div id="google-map"></div>
+    <script 
+        src="https://maps.googleapis.com/maps/api/js?key={{ key }}&callback=initMap"
+        defer
+    ></script>
 </div>
+
+<script>
+    function initMap(data){
+        const map = new google.maps.Map(document.getElementById("google-map"));
+        const events = {{ events_serialized|safe }}
+        
+        // create markers and update the map to fit
+        const bounds = new google.maps.LatLngBounds()
+        var markers = []
+        for (var event of events) {
+            if (event.fields.lat != null){
+                var marker = new google.maps.Marker({
+                    position: { lat: event.fields.lat, lng: event.fields.lng} ,
+                    map: map,
+                })
+                markers.push(marker)
+                bounds.extend(marker.getPosition())
+            }
+        }
+
+        map.fitBounds(bounds)
+    }
+</script>
 {% endblock content %}
