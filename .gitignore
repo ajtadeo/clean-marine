@@ -1,4 +1,5 @@
 .env
-.vscode/
+**/.vscode/
 dump.json
-*.pyc
+**/.DS_Store
+**/__pycache__
