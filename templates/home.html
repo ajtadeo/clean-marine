@@ -3,11 +3,13 @@
 {% block content %}
 
 <div id="content-wrapper">
-    <div id="event-list">
+    <div id="events">
         <h3>Beach Cleanups</h3>
-        {% for event_i in events %}
-            {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link datetime=event_i.datetime location=event_i.location %}
-        {% endfor %}
+        <div id="events-list">
+            {% for event_i in events %}
+                {% component "event" eventname=event_i.eventname organization=event_i.organization link=event_i.link datetime=event_i.datetime location=event_i.location %}
+            {% endfor %}
+        </div>
     </div>
     <div id="google-map"></div>
     <script 
@@ -19,7 +21,7 @@
 <script>
     function initMap(data){
         const map = new google.maps.Map(document.getElementById("google-map"));
-        const events = {{ events|safe }}
+        const events = {{ events_serialized|safe }}
         
         // create markers and update the map to fit
         const bounds = new google.maps.LatLngBounds()

@@ -16,7 +16,8 @@ def home_page_view(request):
     serialized_events = serializers.serialize("json", events)
 
     context = {
-        'events': serialized_events,
+        'events_serialized': serialized_events,
+        'events': events,
         'key': os.getenv("GOOGLE_MAPS_KEY")
     }
     return render(request, 'home.html', context)

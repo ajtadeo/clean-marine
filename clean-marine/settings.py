@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # 'django.contrib.staticfiles',
     'webscraper',  # web scraper
     'django_components',
+    "django_components.safer_staticfiles" # ignores html, js files in static dirs
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    BASE_DIR / 'static',
+    BASE_DIR / 'components'
 ]
 
 # Default primary key field type

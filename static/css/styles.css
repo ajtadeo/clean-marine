@@ -1,20 +1,21 @@
 #content-wrapper {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: stretch;
-    align-content: stretch;
     height: 80vh;
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 20px;
 }
 
-#event-list {
+#events {
     order: 1;
     height: 100%;
-    flex-basis: 48%;
+    flex-basis: 50%;
+}
+
+#events-list {
+    overflow-y: auto;
 }
 
 #google-map {
