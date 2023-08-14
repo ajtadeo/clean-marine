@@ -2,12 +2,9 @@ from django.shortcuts import render
 from django.views import generic
 from django.db import models
 from django.core import serializers
-from webscraper.models import Events
+from dashboard.models import Events
 
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 
 
 def home_page_view(request):
@@ -20,4 +17,4 @@ def home_page_view(request):
         'events': events,
         'key': os.getenv("GOOGLE_MAPS_KEY")
     }
-    return render(request, 'home.html', context)
+    return render(request, './home.html', context)
