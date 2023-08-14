@@ -10,7 +10,6 @@ dependencies:
     - webdriver_manager
     - beautifulsoup4
     - selenium
-    - python-dotenv
     - flake8
     - invoke
     - sqlite3

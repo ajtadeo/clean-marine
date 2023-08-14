@@ -3,3 +3,5 @@
 dump.json
 **/.DS_Store
 **/__pycache__
+google_maps_key.txt
+secret_key.txt

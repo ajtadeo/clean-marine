@@ -3,7 +3,6 @@ from invoke import task, run
 import os
 import django
 import sqlite3
-from dotenv import load_dotenv
 import requests
 # from xml.etree import ElementTree
 # from os import listdir
@@ -12,7 +11,6 @@ import requests
 # this setup needs to be at the top in order to execute the webscraper the app's context
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clean-marine.settings")
 django.setup()
-load_dotenv()
 
 # web scraping
 # from bs4 import BeautifulSoup
@@ -26,7 +24,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from webscraper.models import Events
+from dashboard.models import Events
 
 # @task
 # def commit(context, name='base'):
@@ -161,5 +159,5 @@ def save(event):
 @task
 def dump(context, env='cm_base'):
     """ Dumps Events table into dump.json """
-    cmd = './manage.py dumpdata webscraper.Events --natural-primary > dump.json'
+    cmd = './manage.py dumpdata dashboard.Events --natural-primary > dump.json'
     run(cmd)
