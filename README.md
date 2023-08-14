@@ -27,8 +27,20 @@ HothX Presentation and Demo: https://youtu.be/zuwXPLttlSM
 ## Docker Setup
 
 ### Steps
-1. Install Docker Desktop.
-2. Execute `docker compose up` in the project root directory.
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/). Open Docker and restart the your terminal window.
+2. Clone the repository and cd into it.
+    ```sh
+    git clone https://github.com/ajtadeo/clean-marine.git
+    cd clean-marine
+    ```
+3. In the project root directory, create `.env` with the following credentials:
+   ```env
+   GOOGLE_MAPS_KEY=secret
+   SECRET_KEY=secret
+   ```
+4. Execute `docker compose up` in the project root directory.
+5. Open the app at [0.0.0.0:8000](0.0.0.0:8000)
+6. To stop the app, either click `Ctrl-C` in the terminal or run `docker compose down` in a seperate terminal.
 
 ### Docker-ization Steps 
 
@@ -96,11 +108,11 @@ Originally, Clean Marine was setup using a conda virtual environment. The code f
    ALLOWED_HOSTS = ['0.0.0.0']
    # ...
    ```
-6. Create the Docker image and run the service
+6. Create the Docker image and run the app.
     ```sh
     docker compose up
     ```
-    Visit your newly Docker-ized app at `0.0.0.0:8000` :partying_face:!
+    Visit your newly Docker-ized app at [0.0.0.0:8000](0.0.0.0:8000) :partying_face:!
 
     NOTE: The Docker images in this multi-container app have the format `clean-marine-[service]`. 
 7. To stop the app, either click `Ctrl-C` in the terminal or run `docker compose down` in a seperate terminal.
@@ -216,6 +228,8 @@ Sometimes it's best to just start from scratch and rerun the webscraper ;-;
     ```
 
 ## Conda Setup (Deprecated)
+
+The code for this deprecated setup method is intended to be used at [this commit](https://github.com/ajtadeo/clean-marine/tree/c26fa3cb93f0fc2f91ffa6ca971f8beea70b6b69) or earlier. Use the [Docker setup](#docker-setup) for current implementation.
 
 ### Steps
 
