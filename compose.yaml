@@ -8,6 +8,15 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
+# Selenium
+  selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - 3333:3333
+      - 7800:7800
+    depends_on: 
+      - django
+# Django
   django:
     build:
       context: .

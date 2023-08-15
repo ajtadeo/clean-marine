@@ -37,6 +37,7 @@ HothX Presentation and Demo: https://youtu.be/zuwXPLttlSM
    ```env
    GOOGLE_MAPS_KEY=secret
    SECRET_KEY=secret
+   DOCKER_DEFAULT_PLATFORM=linux/amd64
    ```
 4. Execute `docker compose up` in the project root directory.
 5. Open the app at `0.0.0.0:8000`
@@ -54,7 +55,9 @@ Originally, Clean Marine was setup using a conda virtual environment. The code f
    ```env
    GOOGLE_MAPS_KEY=secret
    SECRET_KEY=secret
+   DOCKER_DEFAULT_PLATFORM=linux/amd64
    ```
+   NOTE: `DOCKER_DEFAULT_PLATFORM` must be set for Mac M1/M2 users. See [this](https://stackoverflow.com/questions/65612411/forcing-docker-to-use-linux-amd64-platform-by-default-on-macos) Stackoverflow post.
    NOTE: We can't use [Docker Secrets](https://docs.docker.com/engine/swarm/secrets/) because this app isn't configured as a Docker Swarm. 
 3. In the root directory, initialize Docker files and create an image of the application
     ```
@@ -118,26 +121,7 @@ Originally, Clean Marine was setup using a conda virtual environment. The code f
 7. To stop the app, either click `Ctrl-C` in the terminal or run `docker compose down` in a seperate terminal.
 
 ### Making Changes
-If changes are made to the Django app or the Docker configuration files, its necessary to remove the containers and images and create new ones. 
-
-1. Stop any running containers by either clicking `Ctrl-C` in the terminal or run `docker compose down` in a seperate terminal. These commands will also remove the containers.
-2. Verify the containers were removed.
-    ```sh
-    docker ps -a
-    ```
-3. Remove the image.
-   ```sh
-   docker image rm clean-marine-django
-   ```
-4. Verify the image was removed.
-   ```sh
-   docker images
-   ```
-5. Recreate the image.
-
-   ```sh
-   docker compose up
-   ```
+If changes are made to the Django app or the Docker configuration files, its necessary to remove the containers and images and create new ones. This can be done by simply running the `refresh.sh` script.
 
 <!-- 7. Verify the image was created
    ```
@@ -294,8 +278,9 @@ The code for this deprecated setup method is intended to be used at [this releas
 
 ## Resources
 
-* [Django Components Documentation](https://github.com/EmilStenstrom/django-components)
-* [SQLite Creating and Dropping Tables](https://www.sqlitetutorial.net/sqlite-drop-table/)
+* [Django components documentation](https://github.com/EmilStenstrom/django-components)
+* [SQLite creating and dropping tables](https://www.sqlitetutorial.net/sqlite-drop-table/)
 * [Converting SQLite DB from local to Docker](https://raphaelpralat.medium.com/how-to-run-local-sqlite-commands-in-a-docker-container-bcba18af69f2)
-* [Setting Environtment Variables in Docker](https://docs.docker.com/compose/environment-variables/set-environment-variables/)
+* [Setting environtment variables in Docker](https://docs.docker.com/compose/environment-variables/set-environment-variables/)
 * [Docker Python documentation](https://docs.docker.com/language/python/)
+* [Docker dependencies best practices](https://www.mend.io/free-developer-tools/blog/docker-dependencies/)
