@@ -2,8 +2,8 @@
 from invoke import task, run
 import os
 import django
-import sqlite3
 import requests
+from stat import *
 # from xml.etree import ElementTree
 # from os import listdir
 # from os.path import isfile, join
@@ -46,6 +46,7 @@ SURFRIDER_URL = 'https://volunteer.surfrider.org'
 @task
 def scrape(context, env='cm_base'):
     """ Run webscrapers for all websites """
+    print(os.getcwd())
     scrape_surfrider()
 
 
@@ -55,12 +56,15 @@ def scrape_surfrider():
         print('Starting Surfrider web scraper...')
         # set up options
         options = Options()
-        options.add_argument('--headless=new')
+        options.add_argument("--no-sandbox")
+        options.add_argument('--headless')
         options.add_argument("--disable-gpu")
         options.add_argument('--blink-settings=imagesEnabled=false')
+        options.add_argument("--disable-dev-shm-usage")
 
         # set up driver
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = webdriver.Chrome(service=Service(executable_path='/usr/bin/chromedriver'), options=options)
         driver.get(SURFRIDER_URL)
 
         # wait for page to load, then scrape all available events
@@ -73,7 +77,7 @@ def scrape_surfrider():
         for event in events:
             events_successful += scrape_surfrider_event(event)
         print(str(events_successful) + " events scraped successfully.")
-
+        driver.quit()
     except Exception as err:
         print('[ERROR] The scraping job failed. See exception:')
         print(err)

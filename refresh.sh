@@ -29,5 +29,5 @@ if docker network ls | grep -q "clean-marine_default"; then
     echo "Cleaned up network clean-marine_default"
 fi
 
-# recreate image and containers
-docker compose up
+# recreate image and containers, then start in detached mode
+docker compose up -d
