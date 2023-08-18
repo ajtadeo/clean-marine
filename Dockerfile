@@ -29,22 +29,25 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Copy the source code into the container.
 COPY . .
 
-# Install helper packages for fetching, unzipping, and installing chrome and chromedriver
+# Install the latest version of Chrome
+# https://gist.github.com/varyonic/dea40abcf3dd891d204ef235c6e8dd79?permalink_comment_id=3160722#gistcomment-3160722
+# https://net2.com/how-to-install-google-chrome-on-ubuntu-20-04/
 RUN apt-get update && \
     apt-get install -y gnupg wget curl unzip --no-install-recommends
-    
-RUN CHROMEVER=$(curl -s "https://omahaproxy.appspot.com/linux") && \
-    wget -q --continue -P /usr/bin "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEVER/linux64/chrome-linux64.zip" && \
-    unzip /usr/bin/chrome-linux64.zip -d /usr/bin && \
-    chmod a+x /usr/bin/chrome-linux64 && \
-    rm /usr/bin/chrome-linux64.zip
 
-# chromedriver installs with missing dependencies, so these extra dependnecies must be installed
-RUN DRIVERVER=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE") && \
-    wget -q --continue -P /usr/bin "http://chromedriver.storage.googleapis.com/$DRIVERVER/chromedriver_linux64.zip" && \
-    unzip /usr/bin/chromedriver_linux64.zip -d /usr/bin && \
-    chmod a+x /usr/bin/chromedriver && \
-    rm /usr/bin/chromedriver_linux64.zip
+RUN wget -q --continue https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    apt install -y ./google-chrome-stable_current_amd64.deb && \
+    rm ./google-chrome-stable_current_amd64.deb
+
+# Install the lastest version of Chromedriver
+RUN DRIVERVER=$(curl -s "https://omahaproxy.appspot.com/linux") && \
+    wget -q --continue "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$DRIVERVER/linux64/chromedriver-linux64.zip" && \
+    unzip ./chromedriver-linux64.zip -d /usr/bin && \
+    chmod a+x /usr/bin/chromedriver-linux64/chromedriver && \
+    rm ./chromedriver-linux64.zip
+
+# append chrome driver location to the PATH
+ENV PATH="${PATH}:/usr/bin/chromedriver-linux64"
 
 # Expose the port that the application listens on.
 EXPOSE 8000

@@ -64,7 +64,7 @@ def scrape_surfrider():
 
         # set up driver
         # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        driver = webdriver.Chrome(service=Service(executable_path='/usr/bin/chromedriver'), options=options)
+        driver = webdriver.Chrome(options=options)
         driver.get(SURFRIDER_URL)
 
         # wait for page to load, then scrape all available events
