@@ -46,7 +46,6 @@ SURFRIDER_URL = 'https://volunteer.surfrider.org'
 @task
 def scrape(context, env='cm_base'):
     """ Run webscrapers for all websites """
-    print(os.getcwd())
     scrape_surfrider()
 
 
@@ -60,11 +59,13 @@ def scrape_surfrider():
         options.add_argument('--headless')
         options.add_argument("--disable-gpu")
         options.add_argument('--blink-settings=imagesEnabled=false')
-        options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--disable-dev-shm-usage")
+
+        print(options.arguments)
 
         # set up driver
         # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(service=Service(executable_path='/usr/bin/chromedriver-linux64/chromedriver'), options=options)
         driver.get(SURFRIDER_URL)
 
         # wait for page to load, then scrape all available events
